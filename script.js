@@ -1,5 +1,11 @@
 let PLAYS = ['Rock', 'Paper', 'Scissors'];
-
+let COMPUTER_SCORE = 0;
+let PLAYER_SCORE = 0;
+const div = document.querySelector('div');
+const para = document.querySelector('p');
+const pScore = document.getElementById('player-score');
+const pcScore = document.getElementById('pc-score');
+const buttons = document.querySelectorAll('.btn');
 function getRandomIndex(){
   return Math.floor(Math.random() * 3);
 }
@@ -36,24 +42,52 @@ function playRound(playerSelect, compuSelect){
   if (playerSelect === compuSelect){
     return `It's a draw, you both had ${playerSelect.toLowerCase()}!`;
   } else if (playerSelect === 'Rock' && compuSelect === 'Paper'){
-    return 'You lose! paper beats rock.';
+    COMPUTER_SCORE += 1;
+    return 'Paper beats Rock.';
   } else if (playerSelect === 'Paper' && compuSelect === 'Scissors'){
-    return 'You lose! scissors beats paper.'
+    COMPUTER_SCORE += 1;
+    return 'Scissors beats Paper.'
   } else if (playerSelect === 'Scissors' && compuSelect === 'Rock'){
-    return 'You lose! rock beats scissors.'
+    COMPUTER_SCORE += 1;
+    return 'Rock beats Scissors.'
   } else {
-    return `You win! ${playerSelect.toLowerCase()} beats ${compuSelect.toLowerCase()}.`
+    PLAYER_SCORE += 1;
+    return ` ${playerSelect} beats ${compuSelect}.`
   }
 
 }
 
-// Write a func called game, that calls the the playRound function 5 times
-
-let playerHand;
-let computerHand;
-
-for(let i = 0; i < 5; i++){
-  playerHand = playerPrompt();
-  computerHand = computerPlay();
-  console.log(playRound(playerHand, computerHand));
+function checkWinner(){
+  if(COMPUTER_SCORE === 5){
+    return "PC WINS!";
+  }
+  else if(PLAYER_SCORE === 5){
+    return "PLAYER WINS!";
+  }
 }
+
+function resetGame(){
+  buttons.forEach( btn => {
+    btn.addEventListener('click', displayResult)
+  });
+  COMPUTER_SCORE = 0;
+  PLAYER_SCORE = 0
+  pScore.firstChild.textContent = PLAYER_SCORE;
+  pcScore.firstChild.textContent = COMPUTER_SCORE;
+}
+
+function displayResult(){
+  let draw = playRound(this.firstChild.textContent, computerPlay());
+  let finalResult = checkWinner();
+  pScore.firstChild.textContent = PLAYER_SCORE;
+  pcScore.firstChild.textContent = COMPUTER_SCORE;
+  para.textContent = finalResult || draw;
+  if (finalResult){
+    buttons.forEach( btn => btn.removeEventListener('click', displayResult));
+    resetGame();
+  }
+  div.className = 'result-box';
+}
+
+resetGame();
+
