@@ -49,11 +49,11 @@ function playRound(playerSelect, compuSelect){
 
 // Write a func called game, that calls the the playRound function 5 times
 
-// let playerHand;
-// let computerHand;
+let playerHand;
+let computerHand;
 
 for(let i = 0; i < 5; i++){
-  let playerHand = playerPrompt();
-  let computerHand = computerPlay();
+  playerHand = playerPrompt();
+  computerHand = computerPlay();
   console.log(playRound(playerHand, computerHand));
 }
